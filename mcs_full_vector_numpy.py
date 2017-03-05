@@ -13,6 +13,7 @@ Created on Sun Mar 05 10:11:09 2017
 import math
 from numpy import *
 from time import time
+import matplotlib.pyplot as plt
 
 # star import for shorter code
 random.seed(20000)
@@ -35,3 +36,23 @@ C0 = math.exp(-r * T) * sum(maximum(S[-1] - K, 0)) / I
 tnp2 = time() - t0
 print 'European Option Value %7.3f' % C0
 print 'Duration in Seconds %7.3f' % tnp2
+
+plt.plot(S[:, :10])
+plt.grid(True)
+plt.xlabel('time step')
+plt.ylabel('index level')
+
+plt.hist(S[-1], bins=200)
+plt.grid(True)
+plt.xlim(0,200)
+plt.xlabel('index level')
+plt.ylabel('frequency')
+
+plt.hist(np.maximum(S[-1] - K, 0), bins=200)
+plt.grid(True)
+plt.xlabel('option inner value')
+plt.xlim(0,100)
+plt.ylabel('requency')
+plt.ylim(0, 50000)
+
+print sum(S[-1] < K)
