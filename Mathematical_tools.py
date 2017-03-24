@@ -77,4 +77,46 @@ ax.set_zlabel('f(x, y)')
 fig.colorbar(surf, shrink=0.5, aspect=5)
 
 # Interpolation
+import scipy.interpolate as spi
+x = np.linspace(-2 * np.pi, 2 * np.pi, 25)
+def f(x):
+    return np.sin(x) + 0.5 * x
+ipo = spi.splrep(x, f(x), k=1)
+iy = spi.splev(x, ipo)
+plt.plot(x, f(x), 'b', label='f(x)')
+plt.plot(x, iy, 'r.', label='interpolation')
+plt.legend(loc=0)
+plt.grid(True)
+plt.xlabel('x')
+plt.ylabel('f(x)')
+np.allclose(f(x), iy)
 
+# Convex Optimization
+def fm((x, y)):
+    return (np.sin(x) + 0.05 * x ** 2 + np.sin(y) + 0.05 * y ** 2)
+x = np.linspace(-10, 10, 50)
+y = np.linspace(-10, 10, 50)
+X, Y = np.meshgrid(x, y)
+Z = fm((X, Y))
+fig = plt.figure(figsize=(9, 6))
+ax = fig.gca(projection='3d')
+surf = ax.plot_surface(X, Y, Z, rstride=2, cstride=2, 
+                       cmap=mpl.cm.coolwarm, 
+                       linewidth=0.5, antialiased=True)
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+ax.set_zlabel('f(x, y)')
+fig.colorbar(surf, shrink=0.5, aspect=5)
+
+def fo((x, y)):
+    z = np.sin(x) + 0.05 * x ** 2 + np.sin(y) + 0.05 * y ** 2
+    if output == True:
+        print '%8.4f %8.4f %8.4f' % (x, y, z)
+    return z
+import scipy.optimize as spo
+output = True
+spo.brute(fo, ((-10, 10.1, 5), (-10, 10.1, 5)), finish=None)  
+
+output = False
+opt1 = spo.brute(fo, ((-10, 10.1, 0.1), (-10, 10.1, 0.1)), finish=None)
+print opt1
