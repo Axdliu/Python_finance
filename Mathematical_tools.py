@@ -120,3 +120,48 @@ spo.brute(fo, ((-10, 10.1, 5), (-10, 10.1, 5)), finish=None)
 output = False
 opt1 = spo.brute(fo, ((-10, 10.1, 0.1), (-10, 10.1, 0.1)), finish=None)
 print opt1
+
+# integration
+import scipy.integrate as sci
+def f(x):
+    return np.sin(x) + 0.5 * x
+a = 0.5
+b = 9.5
+x = np.linspace(0,10)
+y = f(x)
+from matplotlib.patches import Polygon
+fig, ax = plt.subplots(figsize=(7, 5))
+plt.plot(x, y, 'b', linewidth=2)
+plt.ylim(ymin=0)
+# area under the function
+# between lower and upper limit
+Ix = np.linspace(a, b)
+Iy = f(Ix)
+verts = [(a, 0)] + list(zip(Ix, Iy)) + [(b, 0)]
+poly = Polygon(verts, facecolor='0.7', edgecolor='0.5')
+ax.add_patch(poly)
+# labels
+plt.text(0.75 * (a + b), 1.5, r'$\int_a^b f(x)dx$', \
+         horizontalalignment='center', fontsize=20)
+plt.figtext(0.9, 0.075, '$x$')
+plt.figtext(0.075, 0.9, '$f(x)$')
+ax.set_xticks((a, b))
+ax.set_xticklabels(('$a$', '$b$'))
+ax.set_yticks([f(a), f(b)])
+
+# Numerical Integration
+sci.fixed_quad(f, a, b)[0]  # fixed Gaussian quadrature
+sci.quad(f, a, b)[0]        # adaptive quadrature
+sci.romberg(f, a, b)        # Romberg integration
+xi = np.linspace(0.5, 9.5, 25)
+sci.trapz(f(xi), xi)        # trapezoidal rule
+sci.simps(f(xi), xi)        # Simpson’s rule
+
+# Integration by Simulation
+for i in range(1, 20):
+    np.random.seed(1000)
+    x = np.random.random(i * 10) * (b - a) + a
+    print np.sum(f(x)) / len(x) * (b - a)
+
+# Symbolic Computation
+import sympy as sy
