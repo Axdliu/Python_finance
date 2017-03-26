@@ -155,7 +155,7 @@ sci.quad(f, a, b)[0]        # adaptive quadrature
 sci.romberg(f, a, b)        # Romberg integration
 xi = np.linspace(0.5, 9.5, 25)
 sci.trapz(f(xi), xi)        # trapezoidal rule
-sci.simps(f(xi), xi)        # Simpson’s rule
+sci.simps(f(xi), xi)        # Simpson's rule
 
 # Integration by Simulation
 for i in range(1, 20):
@@ -165,3 +165,26 @@ for i in range(1, 20):
 
 # Symbolic Computation
 import sympy as sy
+x = sy.Symbol('x')
+y = sy.Symbol('y')
+type(x)
+sy.sqrt(x)
+3 + sy.sqrt(x) - 4 ** 2
+f = x ** 2 + 3 + 0.5 * x ** 2 + 3 / 2
+sy.simplify(f)
+print sy.pretty(sy.sqrt(x) + 0.5)
+pi_str = str(sy.N(sy.pi, 40))
+sy.solve(x ** 2 - 1)
+sy.solve(x ** 3 + 0.5 * x ** 2 - 1)
+sy.solve(x ** 2 + y ** 2)
+a, b = sy.symbols('a b')
+print sy.pretty(sy.Integral(sy.sin(x) + 0.5 * x, (x, a, b)))
+int_func = sy.integrate(sy.sin(x) + 0.5 * x, x)
+print sy.pretty(int_func)
+Fb = int_func.subs(x, 9.5).evalf()
+Fa = int_func.subs(x, 0.5).evalf()
+Fb - Fa # exact value of integral
+int_func_limits = sy.integrate(sy.sin(x) + 0.5 * x, (x, a, b))
+print sy.pretty(int_func_limits)
+int_func_limits.subs({a : 0.5, b : 9.5}).evalf()
+sy.integrate(sy.sin(x) + 0.5 * x, (x, 0.5, 9.5))
